@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import ThreeScene from './components/ThreeScene';
 
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
@@ -33,15 +34,15 @@ function App() {
         timer = setTimeout(() => func(...args), delay);
       };
     };
-  
+
     const handleScroll = debounce(() => {
       setShowButton(window.scrollY > 200);
     }, 100);
-  
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
+
 
   useEffect(() => {
     const backToTop = document.querySelector(".back-to-top");
@@ -57,7 +58,7 @@ function App() {
       }
     }
   }, [showButton]);
-  
+
 
 
   const scrollToTop = () => {
@@ -88,10 +89,16 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div>
+      <div className="fixed w-full flex justify-center  z-0 overflow-visible">
+        <div style={{ width: '100%', height: '100vh', overflow: 'visible' }}>
+          <ThreeScene />
+          <ThreeScene />
+        </div>
+      </div>
       <Navbar onToggle={() => setDarkMode((prevMode) => !prevMode)} darkMode={darkMode} />
       <div className={`flex flex-col w-full items-center overflow-hidden min-h-screen ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
-        <h1 className={`text-5xl md:text-7xl lg:text-9xl font-bold pt-20 ${darkMode ? "text-white" : "text-black"}`}>
+        <h1 className={`text-5xl md:text-7xl lg:text-9xl z-10 font-bold pt-20 ${darkMode ? "text-white" : "text-black"}`}>
           <span className="text-red-600">V</span>IDEO <span className="text-red-600">V</span>ERCEL<span className="text-red-600">.</span>
         </h1>
         <div className="upload">
@@ -116,7 +123,7 @@ function App() {
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

@@ -9,9 +9,9 @@ export default function Navbar({ onToggle }) {
     };
 
     return (
-        <nav className={`w-full px-4 py-3 shadow-md ${isLightMode ? "bg-white text-black" : "bg-black text-white"}`}>
+        <nav className={`w-full px-4 py-3 -z-10 shadow-md ${isLightMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <div className="flex justify-end items-center">
-                <button onClick={toggleTheme} aria-label="Toggle theme" className="focus:outline-none">
+                <button onClick={toggleTheme} aria-label="Toggle theme" className="focus:outline-none z-50">
                     {isLightMode ? (
                         <div className="flex items-center justify-center bg-gray-200 rounded-full h-8 w-8 shadow-md transition duration-500 ease-in-out">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-800" viewBox="0 0 20 20" fill="currentColor">

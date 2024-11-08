@@ -11,6 +11,8 @@
     "start": "vite && nodemon ./routes/index.js"
   },
   "dependencies": {
+    "@react-three/drei": "^9.115.0",
+    "@react-three/fiber": "^8.17.10",
     "express": "^4.21.1",
     "gsap": "^3.12.5",
     "multer": "^1.4.5-lts.1",
