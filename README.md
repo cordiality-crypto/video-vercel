@@ -1,2 +1,2 @@
-# video-vercel
-AI powered Thumbnail Generator
+# Video Vercel
+An AI powered Thumbnail Generator
