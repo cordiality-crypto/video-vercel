@@ -8,7 +8,6 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
-// Register the plugins
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
 function App() {
@@ -27,22 +26,44 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (showButton) {
-      gsap.fromTo(
-        ".back-to-top",
-        { scale: 0, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.5, ease: "bounce.out" }
-      );
-    } else {
-      gsap.to(".back-to-top", { scale: 0, opacity: 0, duration: 0.3 });
+    const debounce = (func, delay) => {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), delay);
+      };
+    };
+  
+    const handleScroll = debounce(() => {
+      setShowButton(window.scrollY > 200);
+    }, 100);
+  
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  
+
+  useEffect(() => {
+    const backToTop = document.querySelector(".back-to-top");
+    if (backToTop) {
+      if (showButton) {
+        gsap.fromTo(
+          backToTop,
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "bounce.out" }
+        );
+      } else {
+        gsap.to(backToTop, { scale: 0, opacity: 0, duration: 0.3 });
+      }
     }
   }, [showButton]);
+  
+
 
   const scrollToTop = () => {
     gsap.to(window, { duration: 1, scrollTo: { y: 0 } });
   };
 
-  // ScrollTrigger animations for each section with blur and fade effect
   useEffect(() => {
     const sections = [".upload", ".about", ".contact", ".footer"];
     sections.forEach((section) => {
@@ -71,7 +92,7 @@ function App() {
       <Navbar onToggle={() => setDarkMode((prevMode) => !prevMode)} darkMode={darkMode} />
       <div className={`flex flex-col w-full items-center overflow-hidden min-h-screen ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
         <h1 className={`text-5xl md:text-7xl lg:text-9xl font-bold pt-20 ${darkMode ? "text-white" : "text-black"}`}>
-          VIDEO VERCEL.
+          <span className="text-red-600">V</span>IDEO <span className="text-red-600">V</span>ERCEL<span className="text-red-600">.</span>
         </h1>
         <div className="upload">
           <Upload darkMode={darkMode} />
@@ -82,18 +103,15 @@ function App() {
         <div className="contact">
           <Contact isDarkMode={darkMode} />
         </div>
+        <Footer isDarkMode={darkMode} />
         <div className="footer w-full">
-          <Footer isDarkMode={darkMode} />
         </div>
-        
-        {/* Back to Top Button */}
         {showButton && (
           <button
             onClick={scrollToTop}
             className="back-to-top fixed bottom-10 right-10 p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-700 transition duration-300"
             aria-label="Back to Top"
           >
-            {/* Upward Arrow Icon */}
             <span className="text-2xl">↑</span>
           </button>
         )}

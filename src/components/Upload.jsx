@@ -32,8 +32,7 @@ export default function Upload({ darkMode }) {
     };
 
     return (
-        <div className="flex flex-col items-center text-center w-full">
-            {/* Hidden file input */}
+        <div className="flex flex-col items-center text-center w-full mt-40">
             <input
                 type="file"
                 accept="video/*"
@@ -41,27 +40,19 @@ export default function Upload({ darkMode }) {
                 id="file-upload"
                 className="hidden"
             />
-            
-            {/* Custom "Browse" button styled as label */}
             <label
                 htmlFor="file-upload"
                 className="px-6 py-3 my-3 font-semibold text-black bg-white border-4 border-black rounded-full shadow-lg cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none"
             >
                 Browse...
             </label>
-            
-            {/* Display file name if a file is selected */}
             <span className="ml-4 text-gray-700">{videoFile ? videoFile.name : "No file selected"}</span>
-
-            {/* Video Preview Section */}
             {videoPreview && (
                 <div className="flex flex-col items-center mt-4">
                     <h4 className="text-lg mb-2">Video Preview:</h4>
                     <video src={videoPreview} controls width="400" className="mb-4 rounded-lg shadow-lg" />
                 </div>
             )}
-            
-            {/* Upload Button */}
             <button
                 onClick={handleUpload}
                 className="mt-4 px-6 py-3 font-semibold text-white bg-red-600 rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none"

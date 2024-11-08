@@ -1,17 +1,16 @@
 import { useState } from "react";
 
 export default function Navbar({ onToggle }) {
-    const [isLightMode, setIsLightMode] = useState(true); // Start with light mode
+    const [isLightMode, setIsLightMode] = useState(true); 
 
     const toggleTheme = () => {
         setIsLightMode(!isLightMode);
-        if (onToggle) onToggle(isLightMode); // Pass the correct mode to parent
+        if (onToggle) onToggle(isLightMode);
     };
 
     return (
         <nav className={`w-full px-4 py-3 shadow-md ${isLightMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <div className="flex justify-end items-center">
-                {/* Right-aligned theme toggle button */}
                 <button onClick={toggleTheme} aria-label="Toggle theme" className="focus:outline-none">
                     {isLightMode ? (
                         <div className="flex items-center justify-center bg-gray-200 rounded-full h-8 w-8 shadow-md transition duration-500 ease-in-out">
