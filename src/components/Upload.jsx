@@ -3,31 +3,47 @@ import { useState } from "react";
 export default function Upload() {
     const [videoFile, setVideoFile] = useState(null);
     const [videoPreview, setVideoPreview] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [imageResponse, setImageResponse] = useState(null);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type.startsWith("video/")) {
             setVideoFile(file);
             setVideoPreview(URL.createObjectURL(file));
+            setErrorMessage(null);
+            setImageResponse(null);
         } else {
-            alert("Please upload a video file.");
+            alert("Please upload a valid video file.");
         }
     };
 
     const handleUpload = () => {
         if (!videoFile) return;
+        setIsLoading(true);
+        setErrorMessage(null);
+
         const formData = new FormData();
         formData.append("video", videoFile);
+
         fetch("http://video-vercel-backend.vercel.app/upload", {
             method: "POST",
             body: formData,
         })
             .then((response) => response.json())
-            .then((d) => {
-                console.log("Upload successful", d);
+            .then((data) => {
+                setIsLoading(false);
+                if (data.imageUrl) {
+                    setImageResponse(data.imageUrl); // Display the image URL returned from the backend
+                } else {
+                    setErrorMessage("Upload failed: No image returned.");
+                }
             })
-            .catch((e) => {
-                console.error("Error uploading", e);
+            .catch((error) => {
+                setIsLoading(false);
+                setErrorMessage("Error uploading video. Please try again.");
+                console.error("Error uploading:", error);
             });
     };
 
@@ -71,6 +87,26 @@ export default function Upload() {
             >
                 Upload Video
             </button>
+
+            {isLoading && (
+                <div className="mt-4 text-[#D83F87]">Uploading, please wait...</div>
+            )}
+
+            {errorMessage && (
+                <div className="mt-4 text-red-500">{errorMessage}</div>
+            )}
+
+            {imageResponse && (
+                <div className="flex flex-col items-center mt-4">
+                    <h4 className="text-lg mb-2 text-[#44318D]">Generated Thumbnail:</h4>
+                    <img
+                        src={imageResponse}
+                        alt="Generated Thumbnail"
+                        width="400"
+                        className="rounded-lg shadow-lg border-2 border-[#E98074]"
+                    />
+                </div>
+            )}
         </div>
     );
 }

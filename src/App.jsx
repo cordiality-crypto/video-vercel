@@ -92,7 +92,7 @@ function App() {
         </div>
       </div>
       <div className="flex flex-col w-full pt-36 items-center overflow-hidden min-h-screen bg-[#6b2cbd] text-[#E98074]">
-        <h1 className="text-5xl md:text-7xl lg:text-9xl z-10 font-bold pt-20 train-one-regular">
+        <h1 className="text-5xl md:text-7xl lg:text-9xl z-10 font-bold pt-20 train-one-regular text-center w-full">
           <span className="text-[#D83F87]">V</span>IDEO <span className="text-[#D83F87]">V</span>ERCEL
         </h1>
         <div className="upload">
