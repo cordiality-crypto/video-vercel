@@ -1,33 +1,37 @@
 import { useState } from "react";
 
 export default function Upload() {
+    // State variables for managing video file, preview, loading status, errors, and response
     const [videoFile, setVideoFile] = useState(null);
     const [videoPreview, setVideoPreview] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [imageResponse, setImageResponse] = useState(null);
 
+    // Handle file input and create a video preview
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type.startsWith("video/")) {
             setVideoFile(file);
-            setVideoPreview(URL.createObjectURL(file));
-            setErrorMessage(null);
-            setImageResponse(null);
+            setVideoPreview(URL.createObjectURL(file)); // Create preview URL
+            setErrorMessage(null); // Reset error messages
+            setImageResponse(null); // Reset image response
         } else {
             alert("Please upload a valid video file.");
         }
     };
 
+    // Handle file upload to the backend
     const handleUpload = () => {
         if (!videoFile) return;
         setIsLoading(true);
         setErrorMessage(null);
 
         const formData = new FormData();
-        formData.append("video", videoFile);
+        formData.append("video", videoFile); // Append video file to form data
 
-        fetch("http://video-vercel-backend.vercel.app/upload", {
+        // Make POST request to backend upload route
+        fetch("http://localhost:5000/upload", {
             method: "POST",
             body: formData,
         })
@@ -35,7 +39,7 @@ export default function Upload() {
             .then((data) => {
                 setIsLoading(false);
                 if (data.imageUrl) {
-                    setImageResponse(data.imageUrl); // Display the image URL returned from the backend
+                    setImageResponse(data.imageUrl); // Set the response image URL
                 } else {
                     setErrorMessage("Upload failed: No image returned.");
                 }
