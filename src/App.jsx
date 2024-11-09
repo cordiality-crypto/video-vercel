@@ -91,9 +91,9 @@ function App() {
           <ThreeScene />
         </div>
       </div>
-      <div className="flex flex-col w-full pt-36 items-center overflow-hidden min-h-screen bg-[#462175] text-[#E98074]">
-        <h1 className="text-5xl md:text-7xl lg:text-9xl z-10 font-bold pt-20">
-          <span className="text-[#D83F87]">V</span>IDEO <span className="text-[#D83F87]">V</span>ERCEL<span className="text-[#D83F87]">.</span>
+      <div className="flex flex-col w-full pt-36 items-center overflow-hidden min-h-screen bg-[#6b2cbd] text-[#E98074]">
+        <h1 className="text-5xl md:text-7xl lg:text-9xl z-10 font-bold pt-20 train-one-regular">
+          <span className="text-[#D83F87]">V</span>IDEO <span className="text-[#D83F87]">V</span>ERCEL
         </h1>
         <div className="upload">
           <Upload />
@@ -109,7 +109,7 @@ function App() {
         {showButton && (
           <button
             onClick={scrollToTop}
-            className="back-to-top fixed bottom-10 right-10 p-4 bg-[#D83F87] text-white rounded-full shadow-lg hover:bg-[#cd317a] transition duration-300"
+            className="back-to-top fixed bottom-10 right-10 p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-700 transition duration-300"
             aria-label="Back to Top"
           >
             <span className="text-2xl">↑</span>

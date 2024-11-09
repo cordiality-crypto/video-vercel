@@ -8,7 +8,7 @@ function randomPosition(range) {
 }
 
 function getRandomColor() {
-  const colors = ['#D83F87', '#2A1B3D', '#44318D', '#E98074', '#A4B3B6'];
+  const colors = ['#A2316A', '#1F142D', '#332468', '#B75D59', '#7B8A8D'];
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
