@@ -3,7 +3,6 @@ import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Upload from "./components/Upload";
-import Navbar from "./components/Navbar";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
@@ -12,7 +11,6 @@ import ThreeScene from './components/ThreeScene';
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
@@ -59,8 +57,6 @@ function App() {
     }
   }, [showButton]);
 
-
-
   const scrollToTop = () => {
     gsap.to(window, { duration: 1, scrollTo: { y: 0 } });
   };
@@ -90,33 +86,30 @@ function App() {
 
   return (
     <div>
-      <div className="fixed w-full flex justify-center  z-0 overflow-visible">
+      <div className="fixed w-full flex justify-center z-0 overflow-visible">
         <div style={{ width: '100%', height: '100vh', overflow: 'visible' }}>
-          <ThreeScene />
           <ThreeScene />
         </div>
       </div>
-      <Navbar onToggle={() => setDarkMode((prevMode) => !prevMode)} darkMode={darkMode} />
-      <div className={`flex flex-col w-full items-center overflow-hidden min-h-screen ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
-        <h1 className={`text-5xl md:text-7xl lg:text-9xl z-10 font-bold pt-20 ${darkMode ? "text-white" : "text-black"}`}>
-          <span className="text-red-600">V</span>IDEO <span className="text-red-600">V</span>ERCEL<span className="text-red-600">.</span>
+      <div className="flex flex-col w-full pt-36 items-center overflow-hidden min-h-screen bg-[#462175] text-[#E98074]">
+        <h1 className="text-5xl md:text-7xl lg:text-9xl z-10 font-bold pt-20">
+          <span className="text-[#D83F87]">V</span>IDEO <span className="text-[#D83F87]">V</span>ERCEL<span className="text-[#D83F87]">.</span>
         </h1>
         <div className="upload">
-          <Upload darkMode={darkMode} />
+          <Upload />
         </div>
         <div className="about">
-          <About isDarkMode={darkMode} />
+          <About />
         </div>
         <div className="contact">
-          <Contact isDarkMode={darkMode} />
+          <Contact />
         </div>
-        <Footer isDarkMode={darkMode} />
-        <div className="footer w-full">
-        </div>
+        <Footer />
+        <div className="footer w-full" />
         {showButton && (
           <button
             onClick={scrollToTop}
-            className="back-to-top fixed bottom-10 right-10 p-4 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-700 transition duration-300"
+            className="back-to-top fixed bottom-10 right-10 p-4 bg-[#D83F87] text-white rounded-full shadow-lg hover:bg-[#cd317a] transition duration-300"
             aria-label="Back to Top"
           >
             <span className="text-2xl">↑</span>
