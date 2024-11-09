@@ -18,7 +18,7 @@ export default function Upload({ darkMode }) {
         if (!videoFile) return;
         const formData = new FormData();
         formData.append("video", videoFile);
-        fetch("http://localhost:5000/upload", {
+        fetch("http:video-vercel-backend.vercel.app/upload", {
             method: "POST",
             body: formData,
         })
