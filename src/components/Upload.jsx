@@ -1,36 +1,38 @@
 import { useState } from "react";
 
 export default function Upload() {
-    // State variables for managing video file, preview, loading status, errors, and response
     const [videoFile, setVideoFile] = useState(null);
     const [videoPreview, setVideoPreview] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [imageResponse, setImageResponse] = useState(null);
+    const [thumbnailCount, setThumbnailCount] = useState(1);
 
-    // Handle file input and create a video preview
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type.startsWith("video/")) {
             setVideoFile(file);
-            setVideoPreview(URL.createObjectURL(file)); // Create preview URL
-            setErrorMessage(null); // Reset error messages
-            setImageResponse(null); // Reset image response
+            setVideoPreview(URL.createObjectURL(file));
+            setErrorMessage(null);
+            setImageResponse(null);
         } else {
             alert("Please upload a valid video file.");
         }
     };
 
-    // Handle file upload to the backend
     const handleUpload = () => {
-        if (!videoFile) return;
+        if (!videoFile || thumbnailCount < 1) {
+            setErrorMessage("Please upload a video and set a valid thumbnail count.");
+            return;
+        }
+        
         setIsLoading(true);
         setErrorMessage(null);
 
         const formData = new FormData();
-        formData.append("video", videoFile); // Append video file to form data
+        formData.append("video", videoFile);
+        formData.append("thumbnailCount", thumbnailCount);
 
-        // Make POST request to backend upload route
         fetch("http://localhost:5000/upload", {
             method: "POST",
             body: formData,
@@ -39,7 +41,7 @@ export default function Upload() {
             .then((data) => {
                 setIsLoading(false);
                 if (data.imageUrl) {
-                    setImageResponse(data.imageUrl); // Set the response image URL
+                    setImageResponse(data.imageUrl);
                 } else {
                     setErrorMessage("Upload failed: No image returned.");
                 }
@@ -62,7 +64,7 @@ export default function Upload() {
             />
             <label
                 htmlFor="file-upload"
-                className="px-6 py-3 my-3 font-semibold text-white bg-[#D83F87] border-4 border-[#2A1B3D] rounded-full shadow-lg cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#44318D]"
+                className="px-6 py-3 my-3 font-semibold text-white bg-[#D83F87] border-4 border-[#2A1B3D] rounded-full shadow-lg cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#44318D]"
                 aria-label="Browse to upload a video file"
             >
                 Browse...
@@ -84,9 +86,21 @@ export default function Upload() {
                 </div>
             )}
 
+            <label className="mt-4 text-[#44318D] font-semibold flex flex-col items-center">
+                Number of Thumbnails:
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={thumbnailCount}
+                    onChange={(e) => setThumbnailCount(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-16 p-2 mt-2 text-center text-white bg-[#2A1B3D] border-2 border-[#D83F87] rounded-full focus:outline-none focus:ring-2 focus:ring-[#44318D]"
+                />
+            </label>
+
             <button
                 onClick={handleUpload}
-                className="mt-4 px-6 py-3 font-semibold text-white bg-[#44318D] rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#D83F87]"
+                className="mt-4 px-6 py-3 font-semibold text-white bg-[#44318D] rounded-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#D83F87]"
                 aria-label="Upload selected video file"
             >
                 Upload Video
