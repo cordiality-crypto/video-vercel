@@ -5,7 +5,7 @@ export default function Upload() {
     const [videoPreview, setVideoPreview] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [imageResponse, setImageResponse] = useState(null);
+    const [downloadUrl, setDownloadUrl] = useState(null);
     const [thumbnailCount, setThumbnailCount] = useState(1);
 
     const handleFileChange = (e) => {
@@ -14,9 +14,17 @@ export default function Upload() {
             setVideoFile(file);
             setVideoPreview(URL.createObjectURL(file));
             setErrorMessage(null);
-            setImageResponse(null);
+            setDownloadUrl(null);
         } else {
             alert("Please upload a valid video file.");
+        }
+    };
+
+    const handleDownload = () => {
+        if (downloadUrl) {
+            // Create full URL by combining backend base URL with the download path
+            const fullUrl = `http://localhost:8000${downloadUrl}`;
+            window.location.href = fullUrl;
         }
     };
 
@@ -25,30 +33,36 @@ export default function Upload() {
             setErrorMessage("Please upload a video and set a valid thumbnail count.");
             return;
         }
-        
+
         setIsLoading(true);
         setErrorMessage(null);
+        setDownloadUrl(null);
 
         const formData = new FormData();
         formData.append("video", videoFile);
-        formData.append("thumbnailCount", thumbnailCount);
+        formData.append("thumbnailCount", thumbnailCount.toString());
 
-        fetch("http://localhost:5000/upload", {
+        fetch("http://localhost:8000/upload", {
             method: "POST",
             body: formData,
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then((data) => {
                 setIsLoading(false);
-                if (data.imageUrl) {
-                    setImageResponse(data.imageUrl);
+                if (data.downloadUrl) {
+                    setDownloadUrl(data.downloadUrl);
                 } else {
-                    setErrorMessage("Upload failed: No image returned.");
+                    setErrorMessage("Upload failed: No download URL returned.");
                 }
             })
             .catch((error) => {
                 setIsLoading(false);
-                setErrorMessage("Error uploading video. Please try again.");
+                setErrorMessage(`Error uploading video: ${error.message}`);
                 console.error("Error uploading:", error);
             });
     };
@@ -114,16 +128,14 @@ export default function Upload() {
                 <div className="mt-4 text-red-500">{errorMessage}</div>
             )}
 
-            {imageResponse && (
-                <div className="flex flex-col items-center mt-4">
-                    <h4 className="text-lg mb-2 text-[#44318D]">Generated Thumbnail:</h4>
-                    <img
-                        src={imageResponse}
-                        alt="Generated Thumbnail"
-                        width="400"
-                        className="rounded-lg shadow-lg border-2 border-[#E98074]"
-                    />
-                </div>
+            {downloadUrl && (
+                <button
+                    onClick={handleDownload}
+                    className="mt-4 px-6 py-3 font-semibold text-white bg-[#44318D] rounded-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#D83F87]"
+                    aria-label="Download thumbnails"
+                >
+                    Download Thumbnails
+                </button>
             )}
         </div>
     );
